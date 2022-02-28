@@ -14,16 +14,32 @@ class ProfileController: UICollectionViewController {
     
     // MARK: - Properties
     
+    private var user: User
+    
     // MARK: - Lifecycle
+    
+    init(user: User) {
+        self.user = user
+        super.init(collectionViewLayout: UICollectionViewFlowLayout())
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) had not been implemented")
+    }
+    
+    // dependency injection - this profilecontroller requires a user to populate everything it has (header, posts) it would make sense to initialize the controller with a user object so anytime we want to instantiate this profilecontroller, it's going to require that we pass in a user for it, that way once it loads, it will already have this user
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
     }
+    // MARK: - API
+    
     
     // MARK: - Helpers
     
     func configureCollectionView(){
+        navigationItem.title = user.username
         collectionView.backgroundColor = .white
         collectionView.register(ProfileCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerIdentifier)
@@ -44,8 +60,10 @@ class ProfileController: UICollectionViewController {
         }
         
         override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-            
+                        
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as! ProfileHeader
+            
+            header.viewModel = ProfileHeaderViewModel(user: user)
             
             return header
         }

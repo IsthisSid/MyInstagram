@@ -7,16 +7,23 @@
 
 import UIKit
 
+protocol AuthenticationDeligate: AnyObject {
+    func authenticationDidComplete()
+}
+// when the login page dismisses, we will use this protocol to delegate action back to the main tab controller to refetch the correct user once we log back in - note update: 'AnyObject' replaces 'class' per suggested fix
+
 class LoginController: UIViewController {
     
     // MARK: - Properties
     
     private var viewModel = LoginViewModel()
+    weak var delegate: AuthenticationDeligate?
+    // class protocol and weak variable created to avoid a retain cycle - storing a reference of another viewcontroller in this property; if we had too strong references of a viewcontroller or class, then it's going to be hard for the memory management to destroy these and you can get a retain cycle and damages the performance of the app
     
     private let iconImage: UIImageView = {
         let iv = UIImageView()
         iv.contentMode = .scaleAspectFill
-        iv.image = UIImage(imageLiteralResourceName: "myInstaLogo")
+        iv.image = UIImage(imageLiteralResourceName: "MyInstaElle")
         return iv
     }()
     
@@ -65,6 +72,7 @@ class LoginController: UIViewController {
         configureNotificationObservers()
     }
     // MARK: - Actions
+    
     @objc func handleLogin() {
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
@@ -74,13 +82,14 @@ class LoginController: UIViewController {
                 print("DEBUG: Failed to log user in \(error.localizedDescription)")
                 return
             }
-            
-            self.dismiss(animated: true, completion: nil)
+            self.delegate?.authenticationDidComplete()
+            // authendticationdidcomplete protocol above - where we handle the user information and update the profile page
         }
     }
     
     @objc func handleShowSignUp() {
         let controller = RegistrationController()
+        controller.delegate = delegate
         navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -103,7 +112,7 @@ class LoginController: UIViewController {
         
         view.addSubview(iconImage)
         iconImage.centerX(inView: view)
-        iconImage.setDimensions(height: 200, width: 240)
+        iconImage.setDimensions(height: 240, width: 480)
         iconImage.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 32)
         
         let stack = UIStackView(arrangedSubviews: [emailTextField, passwordTextField, loginButton, forgotPasswordButton])
@@ -132,3 +141,5 @@ extension LoginController: formViewModel {
         loginButton.isEnabled = viewModel.formIsValid
     }
 }
+
+

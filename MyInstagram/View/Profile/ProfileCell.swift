@@ -13,7 +13,7 @@ class ProfileCell: UICollectionViewCell {
     
     private let postImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(imageLiteralResourceName: "sidBao")
+        iv.image = UIImage(imageLiteralResourceName: "AhnyIcon")
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         return iv
