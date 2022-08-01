@@ -11,7 +11,7 @@ Hello fellow coder :wave:. Once, I was curious about what goes into the building
 * This is an Instagram clone for iOS mobile.
 * The programming language I used: Swift.
 <br>
-#### How to View My Project
+#### How to View My Project<br>
 * Install [Xcode](https://apps.apple.com/us/app/xcode/id497799835?mt=12) on macOS.
 * Choose 'clone an existing project'. <br>
 ![XcodeSS](https://user-images.githubusercontent.com/72266833/182178925-221e214d-5947-4e31-a0eb-7632ff3591f4.png)
